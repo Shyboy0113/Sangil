@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     
     // 동전 관련
     public int score = 0;
-    
+    public int ClearScore = 20;
+
     // 클리어 UI
     public Canvas finishUI;
     public Canvas overUI;
@@ -20,17 +21,32 @@ public class Player : MonoBehaviour
     //체력 관련
     public float maxHp = 100;
     public float hp;
+
+    public float DeadHeight = -100f;
     
     public void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         hp = maxHp;
+        score = 0;
     }
-
+    private void FixedUpdate()
+    {
+        OnDown();
+    }
     public void Update()
     {
         HandleMove();
         HandleJump();
+    }
+    private void OnDown()
+    {
+        if(transform.position.y < DeadHeight)
+        {
+            hp = 0; // 체력 0으로 설정
+            overUI.gameObject.SetActive(true);
+            Time.timeScale = 0; // 시간 정지
+        }
     }
 
     private void HandleMove()
@@ -58,10 +74,13 @@ public class Player : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.tag == "Finish")
+        if(score >= ClearScore)
         {
-            finishUI.gameObject.SetActive(true);
-            Time.timeScale = 0;
+            if (other.tag == "Finish")
+            {
+                finishUI.gameObject.SetActive(true);
+                Time.timeScale = 0;
+            }
         }
     }
 

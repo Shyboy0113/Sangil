@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Title");
     }
 
-    public void StartGame()
+    public void GoStage(string stage)
     {
-        SceneManager.LoadScene("InGame");
+        SceneManager.LoadScene(stage);
         Time.timeScale = 1;
     }
 }
